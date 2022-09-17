@@ -1,0 +1,40 @@
+{
+  "name": "@regions-of-indonesia/client",
+  "version": "0.0.0",
+  "description": "Regions of Indonesia client",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test:dev": "vitest --ui",
+    "test:prod": "vitest run",
+    "test": "yarn run test:prod",
+    "build": "rimraf dist && microbundle src/index.ts --format esm,cjs --sourcemap false",
+    "release": "release-it"
+  },
+  "repository": "https://github.com/regions-of-indonesia/client.git",
+  "author": "flamrdevs <flamrdevs@gmail.com>",
+  "license": "GPL-3.0",
+  "private": false,
+  "devDependencies": {
+    "@vitest/ui": "^0.23.2",
+    "jsdom": "^20.0.0",
+    "microbundle": "^0.15.1",
+    "node-fetch": "^3.2.10",
+    "release-it": "^15.4.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.3",
+    "vitest": "^0.23.2"
+  }
+}
