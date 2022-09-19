@@ -14,7 +14,7 @@ class Province {
   async find(options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.provinces();
 
-    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(`${key}/${key}`) : key, options);
+    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(key) : key, options);
   }
   async findByCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.province(code);
