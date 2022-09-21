@@ -1,3 +1,5 @@
+import type { CodeName } from "./types";
+
 function isTypeofString(value: unknown): value is string {
   return typeof value === "string";
 }
@@ -17,8 +19,31 @@ const code = {
   },
 };
 
+function sortFnByCodeAsc(a: CodeName, b: CodeName): number {
+  if (a.code > b.code) return 1;
+  if (a.code < b.code) return -1;
+  return 0;
+}
+
+function sortFnByNameAsc(a: CodeName, b: CodeName): number {
+  if (a.name > b.name) return 1;
+  if (a.name < b.name) return -1;
+  return 0;
+}
+
+function sort(codenames: CodeName[]) {
+  return {
+    byCode() {
+      return [...codenames.sort(sortFnByCodeAsc)];
+    },
+    byName() {
+      return [...codenames.sort(sortFnByNameAsc)];
+    },
+  };
+}
+
 function dotjson(key: string) {
   return `${key}.json`;
 }
 
-export { code, dotjson };
+export { code, sort, dotjson };

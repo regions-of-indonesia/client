@@ -1,13 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import nodeFetch from "node-fetch";
-
 import RegionsOfIndonesiaClient from "./RegionsOfIndonesiaClient";
 
-globalThis.fetch = nodeFetch as any;
-
 describe("Regions of Indonesia client API", () => {
-  const client = new RegionsOfIndonesiaClient();
+  const client = new RegionsOfIndonesiaClient({
+    baseURL: "http://localhost:3000",
+  });
 
   it("Provinces", async () => {
     const data = await client.province.find();

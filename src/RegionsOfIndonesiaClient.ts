@@ -133,8 +133,8 @@ interface RegionsOfIndonesiaClientOptions {
 }
 
 class RegionsOfIndonesiaClient {
-  public baseURL: string;
-  public static: boolean;
+  private _baseURL: string;
+  private _static: boolean;
   private middlewares: Middleware[];
 
   public province: Province;
@@ -142,9 +142,17 @@ class RegionsOfIndonesiaClient {
   public subdistrict: Subdistrict;
   public village: Village;
 
+  public get baseURL() {
+    return this._baseURL;
+  }
+
+  public get static() {
+    return this._static;
+  }
+
   constructor(options: RegionsOfIndonesiaClientOptions = {}) {
-    this.baseURL = options.baseURL ?? "https://regions-of-indonesia-flamrdevs.koyeb.app";
-    this.static = Boolean(options.static);
+    this._baseURL = options.baseURL ?? "https://regions-of-indonesia-flamrdevs.koyeb.app";
+    this._static = Boolean(options.static);
     this.middlewares = options.middlewares ?? [log(), cache()];
 
     this.province = new Province(this);
@@ -173,7 +181,7 @@ class RegionsOfIndonesiaClient {
   }
 
   public async fetch<T extends any>(url: string, options?: Options): Promise<T> {
-    return await this.execute({ url: `${this.baseURL}/${url}` }, async ({ url }: Context) => await this.fetcher(url, options));
+    return await this.execute({ url: `${this._baseURL}/${url}` }, async ({ url }: Context) => await this.fetcher(url, options));
   }
 
   static pathname = {
@@ -196,7 +204,7 @@ class RegionsOfIndonesiaClient {
   };
 
   public async search(text: string, options?: Options) {
-    if (this.static) {
+    if (this._static) {
       console.warn("Search API not supported in static API");
       return {
         provinces: [],
