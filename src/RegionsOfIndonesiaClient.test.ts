@@ -3,9 +3,7 @@ import { describe, expect, it } from "vitest";
 import RegionsOfIndonesiaClient from "./RegionsOfIndonesiaClient";
 
 describe("Regions of Indonesia client API", () => {
-  const client = new RegionsOfIndonesiaClient({
-    baseURL: "http://localhost:3000",
-  });
+  const client = new RegionsOfIndonesiaClient({});
 
   it("Provinces", async () => {
     const data = await client.province.find();
@@ -95,10 +93,7 @@ describe("Regions of Indonesia client API", () => {
 });
 
 describe("Regions of Indonesia client static API", () => {
-  const client = new RegionsOfIndonesiaClient({
-    baseURL: "https://regions-of-indonesia.github.io/static-api",
-    static: true,
-  });
+  const client = new RegionsOfIndonesiaClient({ static: true });
 
   it("Provinces", async () => {
     const data = await client.province.find();

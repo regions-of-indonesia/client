@@ -151,8 +151,13 @@ class RegionsOfIndonesiaClient {
   }
 
   constructor(options: RegionsOfIndonesiaClientOptions = {}) {
-    this._baseURL = options.baseURL ?? "https://regions-of-indonesia-flamrdevs.koyeb.app";
     this._static = Boolean(options.static);
+
+    const fallbackBaseURL = this._static
+      ? "https://regions-of-indonesia.github.io/static-api"
+      : "https://regions-of-indonesia-flamrdevs.koyeb.app";
+
+    this._baseURL = options.baseURL ?? fallbackBaseURL;
     this.middlewares = options.middlewares ?? [log(), cache()];
 
     this.province = new Province(this);
