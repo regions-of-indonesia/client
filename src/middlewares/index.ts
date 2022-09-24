@@ -1,2 +1,2 @@
-export { cache } from "./cache";
-export { log } from "./log";
+export * from "./cache";
+export * from "./log";
