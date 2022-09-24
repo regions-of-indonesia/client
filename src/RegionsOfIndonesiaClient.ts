@@ -13,14 +13,16 @@ class Province {
 
   async find(options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.provinces();
-
-    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName[]>(key, url, options);
   }
+
   async findByCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.province(code);
-
-    return await this.client.fetch<CodeName>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName>(key, url, options);
   }
+
   async search(text: string, options?: Options) {
     if (this.client.static) {
       console.warn("Province search API not supported in static API");
@@ -28,8 +30,7 @@ class Province {
     }
 
     const key = RegionsOfIndonesiaClient.pathname.searchProvinces(text);
-
-    return await this.client.fetch<CodeName[]>(key, options);
+    return await this.client.fetch<CodeName[]>(key, key, options);
   }
 }
 
@@ -42,14 +43,14 @@ class District {
 
   async findByProvinceCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.districts(code);
-
-    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName[]>(key, url, options);
   }
 
   async findByCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.district(code);
-
-    return await this.client.fetch<CodeName>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName>(key, url, options);
   }
 
   async search(text: string, options?: Options) {
@@ -59,8 +60,7 @@ class District {
     }
 
     const key = RegionsOfIndonesiaClient.pathname.searchDistricts(text);
-
-    return await this.client.fetch<CodeName[]>(key, options);
+    return await this.client.fetch<CodeName[]>(key, key, options);
   }
 }
 
@@ -73,14 +73,14 @@ class Subdistrict {
 
   async findByDistrictCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.subdistricts(code);
-
-    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName[]>(key, url, options);
   }
 
   async findByCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.subdistrict(code);
-
-    return await this.client.fetch<CodeName>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName>(key, url, options);
   }
 
   async search(text: string, options?: Options) {
@@ -90,8 +90,7 @@ class Subdistrict {
     }
 
     const key = RegionsOfIndonesiaClient.pathname.searchSubdistricts(text);
-
-    return await this.client.fetch<CodeName[]>(key, options);
+    return await this.client.fetch<CodeName[]>(key, key, options);
   }
 }
 
@@ -104,14 +103,14 @@ class Village {
 
   async findBySubdistrictCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.villages(code);
-
-    return await this.client.fetch<CodeName[]>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName[]>(key, url, options);
   }
 
   async findByCode(code: string, options?: Options) {
     const key = RegionsOfIndonesiaClient.pathname.village(code);
-
-    return await this.client.fetch<CodeName>(this.client.static ? dotjson(key) : key, options);
+    const url = this.client.static ? dotjson(key) : key;
+    return await this.client.fetch<CodeName>(key, url, options);
   }
 
   async search(text: string, options?: Options) {
@@ -121,8 +120,7 @@ class Village {
     }
 
     const key = RegionsOfIndonesiaClient.pathname.searchVillages(text);
-
-    return await this.client.fetch<CodeName[]>(key, options);
+    return await this.client.fetch<CodeName[]>(key, key, options);
   }
 }
 
@@ -185,8 +183,8 @@ class RegionsOfIndonesiaClient {
     return await response.json();
   }
 
-  public async fetch<T extends any>(url: string, options?: Options): Promise<T> {
-    return await this.execute({ url: `${this._baseURL}/${url}` }, async ({ url }: Context) => await this.fetcher(url, options));
+  public async fetch<T extends any>(key: string, url: string, options?: Options): Promise<T> {
+    return await this.execute({ key, url: `${this._baseURL}/${url}` }, async ({ url }: Context) => await this.fetcher(url, options));
   }
 
   static pathname = {
@@ -220,13 +218,12 @@ class RegionsOfIndonesiaClient {
     }
 
     const key = RegionsOfIndonesiaClient.pathname.search(text);
-
     return await this.fetch<{
       provinces: CodeName[];
       districts: CodeName[];
       subdistricts: CodeName[];
       villages: CodeName[];
-    }>(key, options);
+    }>(key, key, options);
   }
 }
 
