@@ -1,12 +1,12 @@
 import type { Middleware } from "../types";
 
-type Driver = {
+type CacheDriver = {
   get: (key: string) => Promise<any>;
   set: (key: string, value: any) => Promise<any>;
   delete: (key: string) => Promise<any>;
 };
 
-const createDefaultDriver = (): Driver => {
+const createDefaultDriver = (): CacheDriver => {
   const map: Map<string, any> = new Map();
 
   return {
@@ -22,9 +22,15 @@ const createDefaultDriver = (): Driver => {
   };
 };
 
-const cache = (driver: Driver = createDefaultDriver()): Middleware => {
+type CacheOptions = {
+  driver?: CacheDriver;
+};
+
+const cache = (options: CacheOptions = {}): Middleware => {
+  const { driver = createDefaultDriver() } = options;
+
   return async (context, next) => {
-    const key = context.url;
+    const key = context.key;
 
     const cached = await driver.get(key);
     if (cached) return cached;
@@ -36,4 +42,6 @@ const cache = (driver: Driver = createDefaultDriver()): Middleware => {
   };
 };
 
+export type { CacheDriver, CacheOptions };
+export { createDefaultDriver };
 export { cache };
