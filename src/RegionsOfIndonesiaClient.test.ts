@@ -1,9 +1,26 @@
 import { describe, expect, it } from "vitest";
 
 import RegionsOfIndonesiaClient from "./RegionsOfIndonesiaClient";
+import { log, cache } from "./middlewares";
 
-describe("Regions of Indonesia client API", () => {
-  const client = new RegionsOfIndonesiaClient({});
+const map = new Map<string, any>();
+
+const driver = {
+  async get(key: string) {
+    return map.get(key);
+  },
+  async set(key: string, value: any) {
+    map.set(key, value);
+  },
+  async delete(key: string) {
+    map.delete(key);
+  },
+};
+
+describe("Regions of Indonesia client API with shared cache", () => {
+  const client = new RegionsOfIndonesiaClient({
+    middlewares: [log({ key: true, url: true }), cache({ driver })],
+  });
 
   it("Provinces", async () => {
     const data = await client.province.find();
@@ -92,8 +109,11 @@ describe("Regions of Indonesia client API", () => {
   });
 });
 
-describe("Regions of Indonesia client static API", () => {
-  const client = new RegionsOfIndonesiaClient({ static: true });
+describe("Regions of Indonesia client static API with shared cache", () => {
+  const client = new RegionsOfIndonesiaClient({
+    middlewares: [log({ key: true, url: true }), cache({ driver })],
+    static: true,
+  });
 
   it("Provinces", async () => {
     const data = await client.province.find();
