@@ -4,6 +4,7 @@ type CodeName = {
 };
 
 type Context = {
+  key: string;
   url: string;
 };
 
