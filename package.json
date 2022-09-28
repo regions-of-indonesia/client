@@ -1,6 +1,6 @@
 {
   "name": "@regions-of-indonesia/client",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Regions of Indonesia client",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
