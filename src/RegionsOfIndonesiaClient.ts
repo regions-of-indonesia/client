@@ -151,9 +151,7 @@ class RegionsOfIndonesiaClient {
   constructor(options: RegionsOfIndonesiaClientOptions = {}) {
     this._static = Boolean(options.static);
 
-    const fallbackBaseURL = this._static
-      ? "https://regions-of-indonesia.github.io/static-api"
-      : "https://regions-of-indonesia-flamrdevs.koyeb.app";
+    const fallbackBaseURL = this._static ? "https://regions-of-indonesia.github.io/static-api" : "https://regions-of-indonesia.deta.dev";
 
     this._baseURL = options.baseURL ?? fallbackBaseURL;
     this.middlewares = options.middlewares ?? [log(), cache()];

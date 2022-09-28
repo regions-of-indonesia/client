@@ -3,23 +3,9 @@ import { describe, expect, it } from "vitest";
 import RegionsOfIndonesiaClient from "./RegionsOfIndonesiaClient";
 import { log, cache } from "./middlewares";
 
-const map = new Map<string, any>();
-
-const driver = {
-  async get(key: string) {
-    return map.get(key);
-  },
-  async set(key: string, value: any) {
-    map.set(key, value);
-  },
-  async delete(key: string) {
-    map.delete(key);
-  },
-};
-
-describe("Regions of Indonesia client API with shared cache", () => {
+describe("Regions of Indonesia client API", () => {
   const client = new RegionsOfIndonesiaClient({
-    middlewares: [log({ key: true, url: true }), cache({ driver })],
+    middlewares: [log({ key: true, url: true }), cache()],
   });
 
   it("Provinces", async () => {
@@ -109,9 +95,9 @@ describe("Regions of Indonesia client API with shared cache", () => {
   });
 });
 
-describe("Regions of Indonesia client static API with shared cache", () => {
+describe("Regions of Indonesia client static API", () => {
   const client = new RegionsOfIndonesiaClient({
-    middlewares: [log({ key: true, url: true }), cache({ driver })],
+    middlewares: [log({ key: true, url: true }), cache()],
     static: true,
   });
 

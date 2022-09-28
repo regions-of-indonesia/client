@@ -1,4 +1,4 @@
-[![](./public/Cover.png)](https://regions-of-indonesia.netlify.app)
+[![cover]][site]
 
 <p align="center">
   <a href="http://www.npmjs.com/package/@regions-of-indonesia/client"><img src="https://img.shields.io/npm/v/@regions-of-indonesia/client" /></a>
@@ -12,20 +12,10 @@ Regions of Indonesia
 
 ## Features
 
-- Support both [Dynamic API](https://github.com/regions-of-indonesia/api) & [Static API](https://github.com/regions-of-indonesia/static-api)
+- Support both [Dynamic API][github:api] & [Static API][github:static-api]
 - Search API for Dynamic API
-- [Javascript client SDK](https://github.com/regions-of-indonesia/client)
-- Documented with in-app [DEMO](https://regions-of-indonesia.netlify.app)
-
-## Roadmap
-
-- [x] Plain data
-- [x] Dynamic API & Static API
-- [x] Javascript Client SDK
-- [ ] Documentation
-- [ ] PHP Client SDK
-- [ ] Dart Client SDK
-- [ ] Python Client SDK
+- [Javascript client SDK][github:client]
+- [Documented][docs] with in-app [demo][site]
 
 ## Types
 
@@ -43,12 +33,14 @@ type SearchResult = {
 };
 ```
 
-## Javascript Client SDK
+## Package
 
 Install
 
 ```bash
 npm install @regions-of-indonesia/client
+# or
+yarn add @regions-of-indonesia/client
 ```
 
 Usage
@@ -59,55 +51,60 @@ Usage
 import { RegionsOfIndonesia } from "@regions-of-indonesia/client";
 
 const client = new RegionsOfIndonesia({
-  // baseURL: string, // optional, default is "https://regions-of-indonesia-flamrdevs.koyeb.app"
-  // middlewares: Middleware[] // optional, default is log and (in-memory) cache
-  // static: boolean, optional, default is false, only set to true if use static API
+  baseURL: string, // [OPTIONAL] default is "https://regions-of-indonesia.deta.dev" or "https://regions-of-indonesia.github.io/static-api" if static is true
+  middlewares: Middleware[] // [OPTIONAL] default is log() and cache()
+  static: boolean, // [OPTIONAL] default is false
 });
 
 // Async Await
 async function getProvinces() {
-  const provinces = await client.province.find(/**options?: { signal?: AbortSignal }*/);
+  const provinces = await client.province.find(); /** provinces is CodeName[] */
 }
 // Promise
-await client.province.findByCode("11" /**options?: { signal?: AbortSignal }*/).then((province) => {
-  console.log(province);
+client.province.findByCode("11").then((province) => {
+  console.log(province); /** province is CodeName */
 });
-
-await client.search("some-text").then((result) => {
+client.search("some-text").then((result) => {
   console.log(result); /** result is SearchResult */
 });
 ```
 
-Other usage
+## Examples
 
-```typescript
-import { RegionsOfIndonesia, log, cache } from "@regions-of-indonesia/client";
-
-const localStorageDriver /** or any */ = {
-  async get(key: string) {
-    return JSON.parse(localStorage.getItem(key));
-  },
-  async set(key: string, value: any) {
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-  async delete(key: string) {
-    localStorage.removeItem(key);
-  },
-};
-
-const client = new RegionsOfIndonesia({
-  baseURL: "https://regions-of-indonesia.github.io/static-api",
-  middlewares: [log(), cache(localStorageDriver)]
-  static: true
-});
-
-// then use as dynamic API or static API rules
-```
+- [react][github:example-react-ts]
+- [solid][github:example-solid-ts]
 
 ## Support
 
-- Donate [Ko-Fi](https://ko-fi.com/flamrdevs) or [Trakteer](https://trakteer.id/flamrdevs)
+[![][support:ko-fi-button]][support:ko-fi]
+
+[![][support:trakteer-button]][support:trakteer]
 
 ## LICENSE
 
 GPL-3.0
+
+[cover]: https://raw.githubusercontent.com/regions-of-indonesia/regions-of-indonesia/main/public/Cover.png?sanitize=true
+[site]: https://regions-of-indonesia.netlify.app
+[docs]: https://regions-of-indonesia-docs.netlify.app
+[github:api]: https://github.com/regions-of-indonesia/api
+[github:static-api]: https://github.com/regions-of-indonesia/static-api
+[github:site]: https://github.com/regions-of-indonesia/site
+[github:docs]: https://github.com/regions-of-indonesia/docs
+[github:client]: https://github.com/regions-of-indonesia/client
+[github:data]: https://github.com/regions-of-indonesia/data
+[github:php-client]: https://github.com/regions-of-indonesia/php-client
+[github:dart-client]: https://github.com/regions-of-indonesia/dart-client
+[github:python-client]: https://github.com/regions-of-indonesia/python-client
+[github:swr]: https://github.com/regions-of-indonesia/swr
+[github:react-query]: https://github.com/regions-of-indonesia/react-query
+[github:solid-query]: https://github.com/regions-of-indonesia/solid-query
+[github:example-react-ts]: https://github.com/regions-of-indonesia/example-react-ts
+[github:example-react-ts-swr]: https://github.com/regions-of-indonesia/example-react-ts-swr
+[github:example-react-ts-query]: https://github.com/regions-of-indonesia/example-react-ts-query
+[github:example-solid-ts]: https://github.com/regions-of-indonesia/example-solid-ts
+[github:example-solid-ts-query]: https://github.com/regions-of-indonesia/example-solid-ts-query
+[support:ko-fi]: https://ko-fi.com/flamrdevs
+[support:ko-fi-button]: https://flamrdevs.vercel.app/ko-fi.png
+[support:trakteer]: https://trakteer.id/flamrdevs
+[support:trakteer-button]: https://flamrdevs.vercel.app/trakteer.png
