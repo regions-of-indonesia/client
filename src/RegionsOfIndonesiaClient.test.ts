@@ -1,189 +1,268 @@
 import { describe, expect, it } from "vitest";
 
-import RegionsOfIndonesiaClient from "./RegionsOfIndonesiaClient";
+import { RegionsOfIndonesiaClient } from "./RegionsOfIndonesiaClient";
 import { log, cache } from "./middlewares";
+import type { CodeName } from "./types";
 
-describe("Regions of Indonesia client API", () => {
+function isCodeName(value: unknown): value is CodeName {
+  if (typeof value === "object" && value.hasOwnProperty("code") && value.hasOwnProperty("name")) {
+    const { code, name } = value as any;
+    return typeof code === "string" && typeof name === "string";
+  }
+
+  return false;
+}
+
+function isCodeNameArray(value: unknown[]): value is CodeName[] {
+  return value.every(isCodeName);
+}
+
+function isSearchResult(value: unknown): value is Record<string, CodeName[]> {
+  if (
+    typeof value === "object" &&
+    value.hasOwnProperty("provinces") &&
+    value.hasOwnProperty("districts") &&
+    value.hasOwnProperty("subdistricts") &&
+    value.hasOwnProperty("villages")
+  ) {
+    const { provinces, districts, subdistricts, villages } = value as any;
+
+    return [provinces, districts, subdistricts, villages].every(isCodeNameArray);
+  }
+
+  return false;
+}
+
+describe("Regions of Indonesia client Dynamic API", () => {
   const client = new RegionsOfIndonesiaClient({
-    middlewares: [log({ key: true, url: true }), cache()],
+    middlewares: [
+      log({
+        key: true,
+        url: true,
+      }),
+      cache({}),
+    ],
+    static: false,
   });
 
   it("Provinces", async () => {
-    const data = await client.province.find();
+    expect(isCodeNameArray(await client.province.find())).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Provinces", async () => {
+    expect(isCodeNameArray(await client.province.find())).toBeTruthy();
   });
 
   it("Province by code", async () => {
-    const data = await client.province.findByCode("11");
+    expect(isCodeName(await client.province.findByCode("11"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Province by code", async () => {
+    expect(isCodeName(await client.province.findByCode("11"))).toBeTruthy();
   });
 
   it("Provinces search", async () => {
-    const data = await client.province.search("a");
+    expect(isCodeNameArray(await client.province.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Provinces search", async () => {
+    expect(isCodeNameArray(await client.province.search("a"))).toBeTruthy();
   });
 
   it("Districts by province code", async () => {
-    const data = await client.district.findByProvinceCode("11");
+    expect(isCodeNameArray(await client.district.findByProvinceCode("11"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Districts by province code", async () => {
+    expect(isCodeNameArray(await client.district.findByProvinceCode("11"))).toBeTruthy();
   });
 
   it("District by code", async () => {
-    const data = await client.district.findByCode("11.01");
+    expect(isCodeName(await client.district.findByCode("11.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] District by code", async () => {
+    expect(isCodeName(await client.district.findByCode("11.01"))).toBeTruthy();
   });
 
   it("Districts search", async () => {
-    const data = await client.district.search("a");
+    expect(isCodeNameArray(await client.district.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Districts search", async () => {
+    expect(isCodeNameArray(await client.district.search("a"))).toBeTruthy();
   });
 
   it("Subdistricts by district code", async () => {
-    const data = await client.subdistrict.findByDistrictCode("11.01");
+    expect(isCodeNameArray(await client.subdistrict.findByDistrictCode("11.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Subdistricts by district code", async () => {
+    expect(isCodeNameArray(await client.subdistrict.findByDistrictCode("11.01"))).toBeTruthy();
   });
 
   it("Subdistrict by code", async () => {
-    const data = await client.subdistrict.findByCode("11.01.01");
+    expect(isCodeName(await client.subdistrict.findByCode("11.01.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Subdistrict by code", async () => {
+    expect(isCodeName(await client.subdistrict.findByCode("11.01.01"))).toBeTruthy();
   });
 
   it("Subdistricts search", async () => {
-    const data = await client.subdistrict.search("a");
+    expect(isCodeNameArray(await client.subdistrict.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Subdistricts search", async () => {
+    expect(isCodeNameArray(await client.subdistrict.search("a"))).toBeTruthy();
   });
 
   it("Villages by subdistrict code", async () => {
-    const data = await client.village.findBySubdistrictCode("11.01.01");
+    expect(isCodeNameArray(await client.village.findBySubdistrictCode("11.01.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Villages by subdistrict code", async () => {
+    expect(isCodeNameArray(await client.village.findBySubdistrictCode("11.01.01"))).toBeTruthy();
   });
 
   it("Village by code", async () => {
-    const data = await client.village.findByCode("11.01.01.2001");
+    expect(isCodeName(await client.village.findByCode("11.01.01.2001"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Village by code", async () => {
+    expect(isCodeName(await client.village.findByCode("11.01.01.2001"))).toBeTruthy();
   });
 
   it("Villages search", async () => {
-    const data = await client.village.search("a");
+    expect(isCodeNameArray(await client.village.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Villages search", async () => {
+    expect(isCodeNameArray(await client.village.search("a"))).toBeTruthy();
   });
 
   it("Search", async () => {
-    const data = await client.search("a");
+    expect(isSearchResult(await client.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
-    expect(data).haveOwnProperty("provinces");
-    expect(data.provinces).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("districts");
-    expect(data.districts).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("subdistricts");
-    expect(data.subdistricts).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("villages");
-    expect(data.villages).toBeInstanceOf(Array);
+  it("[CACHE] Search", async () => {
+    expect(isSearchResult(await client.search("a"))).toBeTruthy();
   });
 });
 
-describe("Regions of Indonesia client static API", () => {
+describe("Regions of Indonesia client Static API", () => {
   const client = new RegionsOfIndonesiaClient({
-    middlewares: [log({ key: true, url: true }), cache()],
+    middlewares: [
+      log({
+        key: true,
+        url: true,
+      }),
+      cache({}),
+    ],
     static: true,
   });
 
   it("Provinces", async () => {
-    const data = await client.province.find();
+    expect(isCodeNameArray(await client.province.find())).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Provinces", async () => {
+    expect(isCodeNameArray(await client.province.find())).toBeTruthy();
   });
 
   it("Province by code", async () => {
-    const data = await client.province.findByCode("11");
+    expect(isCodeName(await client.province.findByCode("11"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Province by code", async () => {
+    expect(isCodeName(await client.province.findByCode("11"))).toBeTruthy();
   });
 
   it("Provinces search", async () => {
-    const data = await client.province.search("a");
+    expect(isCodeNameArray(await client.province.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Provinces search", async () => {
+    expect(isCodeNameArray(await client.province.search("a"))).toBeTruthy();
   });
 
   it("Districts by province code", async () => {
-    const data = await client.district.findByProvinceCode("11");
+    expect(isCodeNameArray(await client.district.findByProvinceCode("11"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Districts by province code", async () => {
+    expect(isCodeNameArray(await client.district.findByProvinceCode("11"))).toBeTruthy();
   });
 
   it("District by code", async () => {
-    const data = await client.district.findByCode("11.01");
+    expect(isCodeName(await client.district.findByCode("11.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] District by code", async () => {
+    expect(isCodeName(await client.district.findByCode("11.01"))).toBeTruthy();
   });
 
   it("Districts search", async () => {
-    const data = await client.district.search("a");
+    expect(isCodeNameArray(await client.district.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Districts search", async () => {
+    expect(isCodeNameArray(await client.district.search("a"))).toBeTruthy();
   });
 
   it("Subdistricts by district code", async () => {
-    const data = await client.subdistrict.findByDistrictCode("11.01");
+    expect(isCodeNameArray(await client.subdistrict.findByDistrictCode("11.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Subdistricts by district code", async () => {
+    expect(isCodeNameArray(await client.subdistrict.findByDistrictCode("11.01"))).toBeTruthy();
   });
 
   it("Subdistrict by code", async () => {
-    const data = await client.subdistrict.findByCode("11.01.01");
+    expect(isCodeName(await client.subdistrict.findByCode("11.01.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Subdistrict by code", async () => {
+    expect(isCodeName(await client.subdistrict.findByCode("11.01.01"))).toBeTruthy();
   });
 
   it("Subdistricts search", async () => {
-    const data = await client.subdistrict.search("a");
+    expect(isCodeNameArray(await client.subdistrict.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Subdistricts search", async () => {
+    expect(isCodeNameArray(await client.subdistrict.search("a"))).toBeTruthy();
   });
 
   it("Villages by subdistrict code", async () => {
-    const data = await client.village.findBySubdistrictCode("11.01.01");
+    expect(isCodeNameArray(await client.village.findBySubdistrictCode("11.01.01"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Villages by subdistrict code", async () => {
+    expect(isCodeNameArray(await client.village.findBySubdistrictCode("11.01.01"))).toBeTruthy();
   });
 
   it("Village by code", async () => {
-    const data = await client.village.findByCode("11.01.01.2001");
+    expect(isCodeName(await client.village.findByCode("11.01.01.2001"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
+  it("[CACHE] Village by code", async () => {
+    expect(isCodeName(await client.village.findByCode("11.01.01.2001"))).toBeTruthy();
   });
 
   it("Villages search", async () => {
-    const data = await client.village.search("a");
+    expect(isCodeNameArray(await client.village.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeInstanceOf(Array);
+  it("[CACHE] Villages search", async () => {
+    expect(isCodeNameArray(await client.village.search("a"))).toBeTruthy();
   });
 
   it("Search", async () => {
-    const data = await client.search("a");
+    expect(isSearchResult(await client.search("a"))).toBeTruthy();
+  });
 
-    expect(data).toBeTypeOf("object");
-    expect(data).haveOwnProperty("provinces");
-    expect(data.provinces).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("districts");
-    expect(data.districts).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("subdistricts");
-    expect(data.subdistricts).toBeInstanceOf(Array);
-    expect(data).haveOwnProperty("villages");
-    expect(data.villages).toBeInstanceOf(Array);
+  it("[CACHE] Search", async () => {
+    expect(isSearchResult(await client.search("a"))).toBeTruthy();
   });
 });

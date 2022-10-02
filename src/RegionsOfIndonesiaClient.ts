@@ -2,7 +2,9 @@ import type { CodeName, Context, Options, Middleware } from "./types";
 
 import { cache, log } from "./middlewares";
 
-import { dotjson } from "./utilities";
+function dotjson(key: string) {
+  return `${key}.json`;
+}
 
 class Province {
   private client: RegionsOfIndonesiaClient;
@@ -226,4 +228,4 @@ class RegionsOfIndonesiaClient {
 }
 
 export type { RegionsOfIndonesiaClientOptions };
-export default RegionsOfIndonesiaClient;
+export { RegionsOfIndonesiaClient };
