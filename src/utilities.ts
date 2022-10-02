@@ -42,8 +42,4 @@ function sort(codenames: CodeName[]) {
   };
 }
 
-function dotjson(key: string) {
-  return `${key}.json`;
-}
-
-export { code, sort, dotjson };
+export { code, sort };
