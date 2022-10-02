@@ -1,23 +1,31 @@
 import type { Middleware } from "../types";
 
+function timing() {
+  const start = new Date().getTime();
+  return function () {
+    const end = new Date().getTime();
+    return { time: end, diff: end - start };
+  };
+}
+
 type LogOptions = {
   key?: boolean;
   url?: boolean;
 };
 
-const log = (options: LogOptions = {}): Middleware => {
+function log(options: LogOptions = {}): Middleware {
   const { key = false, url = true } = options;
 
   return async (context, next) => {
-    const start = new Date().getTime();
+    const tick = timing();
     const data = await next();
-    const end = new Date().getTime();
+    const { time, diff } = tick();
 
-    console.log(`[${end} ${end - start}ms] ${key ? `[KEY ${context.key}]` : ""} ${url ? `[URL ${context.url}]` : ""}`);
+    console.log([`[${time} ${diff}ms]`, key && `[KEY ${context.key}]`, url && `[URL ${context.url}]`].filter(Boolean).join(" - "));
 
     return data;
   };
-};
+}
 
 export type { LogOptions };
 export { log };

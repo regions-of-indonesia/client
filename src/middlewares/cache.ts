@@ -1,9 +1,9 @@
 import type { Middleware } from "../types";
 
-type CacheDriver = {
-  get: (key: string) => Promise<any>;
-  set: (key: string, value: any) => Promise<any>;
-  delete: (key: string) => Promise<any>;
+type CacheDriver<T = any> = {
+  get: (key: string) => Promise<T>;
+  set: (key: string, value: T) => Promise<void>;
+  delete: (key: string) => Promise<void>;
 };
 
 const createDefaultDriver = (): CacheDriver => {
@@ -14,10 +14,10 @@ const createDefaultDriver = (): CacheDriver => {
       return map.get(key);
     },
     set: async (key, value) => {
-      return map.set(key, value);
+      map.set(key, value);
     },
     delete: async (key) => {
-      return map.delete(key);
+      map.delete(key);
     },
   };
 };
@@ -26,7 +26,7 @@ type CacheOptions = {
   driver?: CacheDriver;
 };
 
-const cache = (options: CacheOptions = {}): Middleware => {
+function cache(options: CacheOptions = {}): Middleware {
   const { driver = createDefaultDriver() } = options;
 
   return async (context, next) => {
@@ -40,7 +40,7 @@ const cache = (options: CacheOptions = {}): Middleware => {
 
     return data;
   };
-};
+}
 
 export type { CacheDriver, CacheOptions };
 export { createDefaultDriver };
