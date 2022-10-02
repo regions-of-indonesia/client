@@ -1,31 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { RegionsOfIndonesiaClient } from "./RegionsOfIndonesiaClient";
-import { log, cache } from "./middlewares";
-import type { CodeName } from "./types";
+import { hasOwnProperties, isTypeofObject } from "javascript-yesterday";
 
-function isCodeName(value: unknown): value is CodeName {
-  if (typeof value === "object" && value.hasOwnProperty("code") && value.hasOwnProperty("name")) {
-    const { code, name } = value as any;
-    return typeof code === "string" && typeof name === "string";
-  }
+import type { CodeName } from "../src";
+import { RegionsOfIndonesiaClient, log, cache } from "../src";
 
-  return false;
-}
-
-function isCodeNameArray(value: unknown[]): value is CodeName[] {
-  return value.every(isCodeName);
-}
+import { isCodeName, isCodeNameArray } from "./@shared";
 
 function isSearchResult(value: unknown): value is Record<string, CodeName[]> {
-  if (
-    typeof value === "object" &&
-    value.hasOwnProperty("provinces") &&
-    value.hasOwnProperty("districts") &&
-    value.hasOwnProperty("subdistricts") &&
-    value.hasOwnProperty("villages")
-  ) {
-    const { provinces, districts, subdistricts, villages } = value as any;
+  if (isTypeofObject(value) && hasOwnProperties(value, "provinces", "districts", "subdistricts", "villages")) {
+    const { provinces, districts, subdistricts, villages } = value;
 
     return [provinces, districts, subdistricts, villages].every(isCodeNameArray);
   }
