@@ -9,6 +9,7 @@ type Context = {
 };
 
 type Options = {
+  static?: boolean;
   signal?: AbortSignal;
 };
 
