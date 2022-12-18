@@ -14,7 +14,7 @@ const code = {
   },
   parse: (value?: string) => {
     if (!isTypeofString(value)) return undefined;
-    const [province, district, subdistrict, village] = code.split(value);
+    const [province, district, subdistrict, village] = code.split(value) || [];
     return { province, district, subdistrict, village };
   },
 };
