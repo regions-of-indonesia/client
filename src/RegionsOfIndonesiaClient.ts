@@ -160,7 +160,7 @@ class RegionsOfIndonesiaClient {
   constructor(options: RegionsOfIndonesiaClientOptions = {}) {
     this.options = options;
 
-    this._static = this.getStatisByOptions();
+    this._static = this.getStaticByOptions();
     this._baseURL = this.getBaseURLByOptions();
     this.middlewares = this.getMiddlewaresByOptions();
 
@@ -170,7 +170,7 @@ class RegionsOfIndonesiaClient {
     this.village = new Village(this);
   }
 
-  private getStatisByOptions() {
+  private getStaticByOptions() {
     return Boolean(this.options?.static);
   }
 
