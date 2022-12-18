@@ -6,6 +6,8 @@
   <a href="https://indonesia-api.netlify.app/regions-of-indonesia"><img src="https://raw.githubusercontent.com/indonesia-api/indonesia-api/main/public/Badge.svg?sanitize=true" /></a>
 </p>
 
+<img src="https://hiiits.deta.dev/hit/regions-of-indonesia/client?" width="100%" heigth="10px" />
+
 # Regions of Indonesia
 
 Regions of Indonesia
@@ -14,7 +16,7 @@ Regions of Indonesia
 
 - Support both [Dynamic API][github:api] & [Static API][github:static-api]
 - Search API for Dynamic API
-- [Javascript client SDK][github:client]
+- [Javascript client][github:client]
 - [Documented][docs] with in-app [demo][site]
 
 ## Types
@@ -51,10 +53,24 @@ Usage
 import { RegionsOfIndonesia } from "@regions-of-indonesia/client";
 
 const client = new RegionsOfIndonesia({
-  baseURL: string, // [OPTIONAL] default is "https://regions-of-indonesia.deta.dev" or "https://regions-of-indonesia.github.io/static-api" if static is true
-  middlewares: Middleware[] // [OPTIONAL] default is log() and cache()
-  static: boolean, // [OPTIONAL] default is false
+  // baseURL?: string | { dynamic?: string; static?: string };
+  // static?: boolean;
+  // middlewares?: Middleware[];
 });
+
+/**
+ * baseURL is optional and default value is object:
+ *    {
+ *       dynamic: "https://regions-of-indonesia.deta.dev",
+ *       static: "https://regions-of-indonesia.github.io/static-api",
+ *    }
+ * static is optional and no default value which means client will use dynamic api
+ * middlewares is optional and default value is array:
+ *    [
+ *      log(),
+ *      cache(),
+ *    ]
+ */
 
 // Async Await
 async function getProvinces() {
