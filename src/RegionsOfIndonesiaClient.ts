@@ -160,7 +160,14 @@ class RegionsOfIndonesiaClient {
   constructor(options: RegionsOfIndonesiaClientOptions = {}) {
     this.options = options;
 
-    this.setup();
+    this._static = this.getStatisByOptions();
+    this._baseURL = this.getBaseURLByOptions();
+    this.middlewares = this.getMiddlewaresByOptions();
+
+    this.province = new Province(this);
+    this.district = new District(this);
+    this.subdistrict = new Subdistrict(this);
+    this.village = new Village(this);
   }
 
   private getStatisByOptions() {
@@ -183,17 +190,6 @@ class RegionsOfIndonesiaClient {
 
   private getMiddlewaresByOptions() {
     return this.options.middlewares ?? [log(), cache()];
-  }
-
-  private setup() {
-    this._static = this.getStatisByOptions();
-    this._baseURL = this.getBaseURLByOptions();
-    this.middlewares = this.getMiddlewaresByOptions();
-
-    this.province = new Province(this);
-    this.district = new District(this);
-    this.subdistrict = new Subdistrict(this);
-    this.village = new Village(this);
   }
 
   private async execute(context: Context, fallback: (context: Context) => Promise<any>, options: Options = {}): Promise<any> {

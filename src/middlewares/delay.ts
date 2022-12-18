@@ -5,7 +5,7 @@ type DelayOptions = {
 };
 
 const inner = async <T extends any>(ms: number = 1000, data?: T) => {
-  return new Promise<T>((resolve) => {
+  return new Promise<T | undefined>((resolve) => {
     setTimeout(() => {
       resolve(data);
     }, ms);
