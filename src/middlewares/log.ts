@@ -17,9 +17,9 @@ function log(options: LogOptions = {}): Middleware {
   const { key = false, url = true } = options;
 
   return async (context, next) => {
-    const tick = timing();
-    const data = await next();
-    const { time, diff } = tick();
+    const tick = timing(),
+      data = await next(),
+      { time, diff } = tick();
 
     console.log([`[${time} ${diff}ms]`, key && `[KEY ${context.key}]`, url && `[URL ${context.url}]`].filter(Boolean).join(" - "));
 

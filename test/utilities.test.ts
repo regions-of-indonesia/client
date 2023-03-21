@@ -56,7 +56,7 @@ describe("Sort", () => {
   ];
 
   it("By code", async () => {
-    const sortedDataByCode = sort(data).byCode();
+    const sortedDataByCode = sort.byCode(data);
 
     expect(isCodeNameArray(sortedDataByCode)).toBeTruthy();
     expect(sortedDataByCode[0].code).toEqual("1.1");
@@ -64,7 +64,7 @@ describe("Sort", () => {
   });
 
   it("By name", async () => {
-    const sortedDataByName = sort(data).byName();
+    const sortedDataByName = sort.byName(data);
 
     expect(isCodeNameArray(sortedDataByName)).toBeTruthy();
     expect(sortedDataByName[0].name).toEqual("AAA");

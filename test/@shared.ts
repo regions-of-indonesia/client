@@ -2,17 +2,9 @@ import { hasOwnProperties, isArray, isTypeofObject, isTypeofString } from "javas
 
 import type { CodeName } from "../src";
 
-function isCodeName(value: unknown): value is CodeName {
-  if (isTypeofObject(value) && hasOwnProperties(value, "code", "name")) {
-    const { code, name } = value;
-    return isTypeofString(code) && isTypeofString(name);
-  }
+const isCodeName = (value: unknown): value is CodeName =>
+  isTypeofObject(value) && hasOwnProperties(value, "code", "name") ? isTypeofString(value.code) && isTypeofString(value.name) : false;
 
-  return false;
-}
-
-function isCodeNameArray(value: unknown): value is CodeName[] {
-  return isArray(value) && value.every(isCodeName);
-}
+const isCodeNameArray = (value: unknown): value is CodeName[] => isArray(value) && value.every(isCodeName);
 
 export { isCodeName, isCodeNameArray };

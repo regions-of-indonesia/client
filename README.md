@@ -6,7 +6,7 @@
   <a href="https://indonesia-api.netlify.app/regions-of-indonesia"><img src="https://raw.githubusercontent.com/indonesia-api/indonesia-api/main/public/Badge.svg?sanitize=true" /></a>
 </p>
 
-<img src="https://hiiits.deta.dev/hit/regions-of-indonesia/client?" width="100%" heigth="10px" />
+<img src="https://hiiits.deno.dev/hit/regions-of-indonesia/client?" width="100%" heigth="10px" />
 
 # Regions of Indonesia
 
@@ -43,6 +43,8 @@ Install
 npm install @regions-of-indonesia/client
 # or
 yarn add @regions-of-indonesia/client
+# or
+pnpm add @regions-of-indonesia/client
 ```
 
 Usage
@@ -61,7 +63,7 @@ const client = new RegionsOfIndonesia({
 /**
  * baseURL is optional and default value is object:
  *    {
- *       dynamic: "https://regions-of-indonesia.deta.dev",
+ *       dynamic: "https://regions-of-indonesia.deno.dev",
  *       static: "https://regions-of-indonesia.github.io/static-api",
  *    }
  * static is optional and no default value which means client will use dynamic api

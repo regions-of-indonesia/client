@@ -7,8 +7,8 @@ import { RegionsOfIndonesiaClient, log, cache } from "../src";
 
 import { isCodeName, isCodeNameArray } from "./@shared";
 
-const __DEV__ = false;
-const getBaseURL = () => (__DEV__ ? { dynamic: "http://localhost:3000" } : {});
+const __DEV__ = true;
+const getBaseURL = () => (__DEV__ ? { dynamic: "http://127.1.0.0:8000" } : {});
 
 function isSearchResult(value: unknown): value is Record<string, CodeName[]> {
   if (isTypeofObject(value) && hasOwnProperties(value, "provinces", "districts", "subdistricts", "villages")) {
@@ -582,7 +582,7 @@ describe("Regions of Indonesia client Static API as Dynamic", () => {
   });
 });
 
-describe("Regions of Indonesia client Static API  with Abortion", () => {
+describe("Regions of Indonesia client Static API with Abortion", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });

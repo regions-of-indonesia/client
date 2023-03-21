@@ -24,11 +24,11 @@
   "license": "GPL-3.0",
   "private": false,
   "devDependencies": {
-    "@vitest/ui": "^0.23.2",
+    "@vitest/ui": "^0.29.7",
     "javascript-yesterday": "^1.2.0",
     "microbundle": "^0.15.1",
-    "node-fetch": "^3.2.10",
-    "release-it": "^15.4.2",
-    "vitest": "^0.23.2"
+    "node-fetch": "^3.3.1",
+    "release-it": "^15.9.0",
+    "vitest": "^0.29.7"
   }
 }
