@@ -19,11 +19,9 @@ const isTypeofString = (value: unknown): value is string => typeof value === "st
   sortFnByCodeAsc = (a: CodeName, b: CodeName): number => sortFn(a.code, b.code),
   sortFnByNameAsc = (a: CodeName, b: CodeName): number => sortFn(a.name, b.name),
   sort = {
-    byCode(codenames: CodeName[]) {
-      return [...codenames.sort(sortFnByCodeAsc)];
-    },
-    byName(codenames: CodeName[]) {
-      return [...codenames.sort(sortFnByNameAsc)];
+    by: {
+      code: (codenames: CodeName[]) => [...codenames.sort(sortFnByCodeAsc)],
+      name: (codenames: CodeName[]) => [...codenames.sort(sortFnByNameAsc)],
     },
   };
 

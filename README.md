@@ -9,14 +9,16 @@
 
 # Regions of Indonesia
 
-Regions of Indonesia client
+Regions of Indonesia client. An API wrapper for dynamic API and static API.
 
 ## Features
 
-- Support both [Dynamic API][github:api] & [Static API][github:static-api]
-- Search API for Dynamic API
-- [Javascript client][github:client]
-- [Documented][docs] with in-app [demo][site]
+- Zero dependency.
+- First class Typescript support.
+- Support both [Dynamic API][github:api] & [Static API][github:static-api].
+- Middleware design.
+- Cancelation control.
+- Out of box support for data fetching libraries (swr, {react,solid,svelte,vue}-query).
 
 ## Types
 
@@ -24,6 +26,13 @@ Regions of Indonesia client
 type CodeName = {
   code: string;
   name: string;
+};
+
+type RegionResult = {
+  province?: CodeName;
+  district?: CodeName;
+  subdistrict?: CodeName;
+  village?: CodeName;
 };
 
 type SearchResult = {
@@ -51,45 +60,41 @@ Usage
 ```typescript
 // src/libs/client.ts
 
-import { RegionsOfIndonesia } from "@regions-of-indonesia/client";
+import { create } from "@regions-of-indonesia/client";
 
-const client = new RegionsOfIndonesia({
-  // baseURL?: string | { dynamic?: string; static?: string };
-  // static?: boolean;
-  // middlewares?: Middleware[];
-});
+const client = create(/** options */);
 
-/**
- * baseURL is optional and default value is object:
- *    {
- *       dynamic: "https://regions-of-indonesia.deno.dev",
- *       static: "https://regions-of-indonesia.github.io/static-api",
- *    }
- * static is optional and no default value which means client will use dynamic api
- * middlewares is optional and default value is array:
- *    [
- *      log(),
- *      cache(),
- *    ]
- */
+await client.province.find() /** CodeName[] */;
+await client.province.find.by("11") /** CodeName */;
 
-// Async Await
-async function getProvinces() {
-  const provinces = await client.province.find(); /** provinces is CodeName[] */
-}
-// Promise
-client.province.findByCode("11").then((province) => {
-  console.log(province); /** province is CodeName */
-});
-client.search("some-name").then((result) => {
-  console.log(result); /** result is SearchResult */
-});
+await client.district.find("11") /** CodeName[] */;
+await client.district.find.by("11.01") /** CodeName */;
+
+await client.subdistrict.find("11.01") /** CodeName[] */;
+await client.subdistrict.find.by("11.01.01") /** CodeName */;
+
+await client.village.find("11.01.01") /** CodeName[] */;
+await client.village.find.by("11.01.01.2001") /** CodeName */;
+
+await client.region("11") /** RegionResult  */;
+await client.region("11.01") /** RegionResult  */;
+await client.region("11.01.01") /** RegionResult  */;
+await client.region("11.01.01.2001") /** RegionResult  */;
+
+await client.search("name") /** SearchResult */;
+
+await client.search.provinces("name") /** CodeName[] */;
+await client.province.search("name") /** CodeName[] */;
+
+await client.search.districts("name") /** CodeName[] */;
+await client.district.search("name") /** CodeName[] */;
+
+await client.search.subdistricts("name") /** CodeName[] */;
+await client.subdistrict.search("name") /** CodeName[] */;
+
+await client.search.villages("name") /** CodeName[] */;
+await client.village.search("name") /** CodeName[] */;
 ```
-
-## Examples
-
-- [react][github:example-react-ts]
-- [solid][github:example-solid-ts]
 
 ## Support
 
@@ -101,21 +106,21 @@ client.search("some-name").then((result) => {
 
 GPL-3.0
 
-<!--  -->
+<!-- exteral -->
 
 [cover]: https://raw.githubusercontent.com/regions-of-indonesia/regions-of-indonesia/main/public/cover@2.png?sanitize=true
 [logo]: https://raw.githubusercontent.com/regions-of-indonesia/regions-of-indonesia/main/public/logo@2.png?sanitize=true
 [site]: https://regions-of-indonesia.netlify.app
 [docs]: https://docs-regions-of-indonesia.netlify.app
 
-<!--  -->
+<!-- github app -->
 
 [github:api]: https://github.com/regions-of-indonesia/api
 [github:static-api]: https://github.com/regions-of-indonesia/static-api
 [github:site]: https://github.com/regions-of-indonesia/site
 [github:docs]: https://github.com/regions-of-indonesia/docs
 
-<!--  -->
+<!-- github client -->
 
 [github:client]: https://github.com/regions-of-indonesia/client
 [github:data]: https://github.com/regions-of-indonesia/data
@@ -123,7 +128,7 @@ GPL-3.0
 [github:dart-client]: https://github.com/regions-of-indonesia/dart-client
 [github:python-client]: https://github.com/regions-of-indonesia/python-client
 
-<!--  -->
+<!-- github library -->
 
 [github:localforage]: https://github.com/regions-of-indonesia/localforage
 [github:swr]: https://github.com/regions-of-indonesia/swr
@@ -132,19 +137,7 @@ GPL-3.0
 [github:vue-query]: https://github.com/regions-of-indonesia/vue-query
 [github:svelte-query]: https://github.com/regions-of-indonesia/svelte-query
 
-<!--  -->
-
-[github:example-react-ts]: https://github.com/regions-of-indonesia/example-react-ts
-[github:example-react-ts-swr]: https://github.com/regions-of-indonesia/example-react-ts-swr
-[github:example-react-ts-query]: https://github.com/regions-of-indonesia/example-react-ts-query
-[github:example-solid-ts]: https://github.com/regions-of-indonesia/example-solid-ts
-[github:example-solid-ts-query]: https://github.com/regions-of-indonesia/example-solid-ts-query
-[github:example-vue-ts]: https://github.com/regions-of-indonesia/example-vue-ts
-[github:example-vue-ts-query]: https://github.com/regions-of-indonesia/example-vue-ts-query
-[github:example-svelte-ts]: https://github.com/regions-of-indonesia/example-svelte-ts
-[github:example-svelte-ts-query]: https://github.com/regions-of-indonesia/example-svelte-ts-query
-
-<!--  -->
+<!-- support -->
 
 [support:ko-fi]: https://ko-fi.com/flamrdevs
 [support:ko-fi-button]: https://flamrdevs.vercel.app/ko-fi.png

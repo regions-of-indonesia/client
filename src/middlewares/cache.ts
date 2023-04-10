@@ -26,19 +26,19 @@ type CacheOptions = {
   driver?: CacheDriver;
 };
 
-function cache(options: CacheOptions = {}): Middleware {
-  const { driver = createDefaultDriver() } = options;
+function cache(options?: CacheOptions): Middleware {
+  const driver = options?.driver ?? createDefaultDriver();
 
   return async (context, next) => {
     const key = context.key;
 
-    const cached = await driver.get(key);
+    let cached = await driver.get(key);
     if (cached) return cached;
 
-    const data = await next();
-    await driver.set(key, data);
+    cached = await next();
+    await driver.set(key, cached);
 
-    return data;
+    return cached;
   };
 }
 

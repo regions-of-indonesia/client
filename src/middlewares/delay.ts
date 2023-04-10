@@ -12,10 +12,8 @@ const inner = async <T extends any>(ms: number = 1000, data?: T) => {
   });
 };
 
-function delay(options: DelayOptions = {}): Middleware {
-  const { ms = 1000 } = options;
-
-  return async (_, next) => await inner(ms, await next());
+function delay(options?: DelayOptions): Middleware {
+  return async (_, next) => await inner(options?.ms, await next());
 }
 
 export type { DelayOptions };
