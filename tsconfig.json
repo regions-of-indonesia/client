@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "allowSyntheticDefaultImports": true,
-    "removeComments": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "noUnusedLocals": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
