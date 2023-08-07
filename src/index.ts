@@ -16,7 +16,7 @@ interface CreateOptions {
 
 const DEFAULT_BASE_URL: BaseURLObject = {
     dynamic: "https://regions-of-indonesia.deno.dev",
-    static: "https://regions-of-indonesia.github.io/static-api",
+    static: "https://regions-of-indonesia.github.io/static",
   },
   DEFAULT_MIDDLEWARES: Middleware[] = [],
   DEFAULT_STATIC: boolean = true,

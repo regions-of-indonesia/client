@@ -5,11 +5,11 @@ import { isRegion, isRegions } from "@regions-of-indonesia/utils";
 
 import { create, cache, createMemoryDriver, delay } from "../src";
 
-const __DEV__: boolean = false;
+const __DEV__: boolean = true;
 
 const baseURL = __DEV__
-  ? { dynamic: "http://127.1.0.0:8000", static: "http://127.1.0.0:8001" }
-  : { dynamic: "https://regions-of-indonesia.deno.dev", static: "https://regions-of-indonesia.github.io/static-api" };
+  ? { dynamic: "http://localhost:8000", static: "http://localhost:8100/static" }
+  : { dynamic: "https://regions-of-indonesia.deno.dev", static: "https://regions-of-indonesia.github.io/static" };
 
 const init = (isStatic: boolean) => {
   const driver = createMemoryDriver();
