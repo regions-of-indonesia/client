@@ -8,7 +8,7 @@ export default defineConfig({
     target: "esnext",
     minify: true,
     lib: {
-      entry: ["src/index.ts"],
+      entry: ["src/index.ts", "src/lite.ts"],
       formats: ["cjs", "es"],
     },
     rollupOptions: {

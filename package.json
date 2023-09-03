@@ -14,6 +14,16 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./lite": {
+      "import": {
+        "types": "./dist/lite.d.ts",
+        "default": "./dist/lite.js"
+      },
+      "require": {
+        "types": "./dist/lite.d.ts",
+        "default": "./dist/lite.cjs"
+      }
     }
   },
   "files": [
@@ -30,7 +40,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "build": "vite build",
-    "release": "pnpm test && pnpm build && release-it"
+    "release": "pnpm build && pnpm test && release-it"
   },
   "devDependencies": {
     "@regions-of-indonesia/types": "5.0.1",

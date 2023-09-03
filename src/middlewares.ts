@@ -1,4 +1,4 @@
-import type { Middleware } from "./types";
+import type { Middleware } from "./shared";
 
 type CacheDriver<T = any> = {
   get: (key: string) => Promise<T>;

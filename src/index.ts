@@ -1,6 +1,41 @@
 import type { Region } from "@regions-of-indonesia/types";
 
-import type { Context, Options, Middleware } from "./types";
+import type {
+  Context,
+  Options,
+  Middleware,
+  FindAllFn,
+  FindByCodeFn,
+  FindByParentCodeFn,
+  RegionFn,
+  SearchFn,
+  FindAllObject,
+  FindByCodeObject,
+  SearchObject,
+} from "./shared";
+import {
+  DEFAULT_DYNAMIC_BASE_URL,
+  DEFAULT_STATIC_BASE_URL,
+  pathname_provinces,
+  pathname_province,
+  pathname_districts,
+  pathname_district,
+  pathname_subdistricts,
+  pathname_subdistrict,
+  pathname_villages,
+  pathname_village,
+  pathname_region,
+  pathname_search,
+  pathname_search_provinces,
+  pathname_search_districts,
+  pathname_search_subdistricts,
+  pathname_search_villages,
+  fetcher,
+  getDynamicURLByKey,
+  getStaticURLByKey,
+  acceptStringRequireCode,
+  acceptStringRequireName,
+} from "./shared";
 
 interface BaseURLObject {
   dynamic: string;
@@ -15,8 +50,8 @@ interface CreateOptions {
 }
 
 const DEFAULT_BASE_URL: BaseURLObject = {
-    dynamic: "https://regions-of-indonesia.deno.dev",
-    static: "https://regions-of-indonesia.github.io/static",
+    dynamic: DEFAULT_DYNAMIC_BASE_URL,
+    static: DEFAULT_STATIC_BASE_URL,
   },
   DEFAULT_MIDDLEWARES: Middleware[] = [],
   DEFAULT_STATIC: boolean = true,
@@ -30,31 +65,6 @@ const resolveBaseURL = (value?: CreateOptions["baseURL"]): BaseURLObject => ({
   resolveStatic = (value?: CreateOptions["static"]): boolean => (typeof value === "boolean" ? value : DEFAULT_STATIC),
   resolveLogger = (value?: CreateOptions["logger"]): boolean => (typeof value === "boolean" ? value : DEFAULT_LOGGER);
 
-const getDynamicURLByKey = (key: string) => key;
-const getStaticURLByKey = (key: string) => `${key}.json`;
-
-const pathname_provinces = "provinces";
-const pathname_province = (code: string) => `provinces/${code}`;
-const pathname_districts = (code: string) => `provinces/${code}/districts`;
-const pathname_district = (code: string) => `districts/${code}`;
-const pathname_subdistricts = (code: string) => `districts/${code}/subdistricts`;
-const pathname_subdistrict = (code: string) => `subdistricts/${code}`;
-const pathname_villages = (code: string) => `subdistricts/${code}/villages`;
-const pathname_village = (code: string) => `villages/${code}`;
-const pathname_region = (code: string) => `region/${code}`;
-const pathname_search = (name: string) => `search?name=${name}`;
-const pathname_search_provinces = (name: string) => `search/provinces?name=${name}`;
-const pathname_search_districts = (name: string) => `search/districts?name=${name}`;
-const pathname_search_subdistricts = (name: string) => `search/subdistricts?name=${name}`;
-const pathname_search_villages = (name: string) => `search/villages?name=${name}`;
-
-const acceptString = (value: unknown, message: string): string => {
-    if (typeof value === "string") return value;
-    throw new Error(message);
-  },
-  acceptStringRequireCode = (value: unknown) => acceptString(value, `Require code`),
-  acceptStringRequireName = (value: unknown) => acceptString(value, `Require name`);
-
 const warnNotSupportStaticAPI = <T>(name: string, value: T): T => {
     console.warn(`${name} API is not supported on static API`);
     return value;
@@ -63,58 +73,16 @@ const warnNotSupportStaticAPI = <T>(name: string, value: T): T => {
 
 const defaultStaticSearchFn = async (_name?: string, _opts?: Options) => warnSearchAPI();
 
-const fetcher = async <T extends any>(url: string, opts?: Options): Promise<T> => {
-  const response = await fetch(url, opts);
-  if (response?.ok) return await response.json();
-  throw new Error("Oops");
-};
-
 const betterdiff = (diff: number) =>
   diff >= 10000 ? "10+s" : diff >= 100 ? `${(diff / 1000).toFixed(1)}s` : `${" ".repeat(diff < 10 ? 1 : 0)}${diff}ms`;
 
-type FindAllFn = (opts?: Options) => Promise<Region[]>;
-type FindByCodeFn = (code?: string, opts?: Options) => Promise<Region>;
-type FindByParentCodeFn = (code?: string, opts?: Options) => Promise<Region[]>;
-type RegionFn = (code?: string, opts?: Options) => Promise<Region>;
-type SearchFn = (name?: string, opts?: Options) => Promise<Region[]>;
-
 type Client = {
-  province: {
-    find: {
-      (opts?: Options): Promise<Region[]>;
-      by: FindByCodeFn;
-    };
-    search: SearchFn;
-  };
-  district: {
-    find: {
-      (code?: string, opts?: Options): Promise<Region[]>;
-      by: FindByCodeFn;
-    };
-    search: SearchFn;
-  };
-  subdistrict: {
-    find: {
-      (code?: string, opts?: Options): Promise<Region[]>;
-      by: FindByCodeFn;
-    };
-    search: SearchFn;
-  };
-  village: {
-    find: {
-      (code?: string, opts?: Options): Promise<Region[]>;
-      by: FindByCodeFn;
-    };
-    search: SearchFn;
-  };
+  province: { find: FindAllObject; search: SearchFn };
+  district: { find: FindByCodeObject; search: SearchFn };
+  subdistrict: { find: FindByCodeObject; search: SearchFn };
+  village: { find: FindByCodeObject; search: SearchFn };
   region: RegionFn;
-  search: {
-    (name?: string, opts?: Options): Promise<Region[]>;
-    provinces: SearchFn;
-    districts: SearchFn;
-    subdistricts: SearchFn;
-    villages: SearchFn;
-  };
+  search: SearchObject;
 };
 
 const create = (options?: CreateOptions) => {

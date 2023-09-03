@@ -1,58 +1,27 @@
-import { describe, expect, it } from "vitest";
+import { describe } from "vitest";
 
-import type { Region } from "@regions-of-indonesia/types";
-import { isRegion, isRegions } from "@regions-of-indonesia/utils";
+import { create, cache, createMemoryDriver, delay } from "./../dist/index";
 
-import { create, cache, createMemoryDriver, delay } from "../src";
-
-const __DEV__: boolean = true;
-
-const baseURL = __DEV__
-  ? { dynamic: "http://localhost:8000", static: "http://localhost:8100/static" }
-  : { dynamic: "https://regions-of-indonesia.deno.dev", static: "https://regions-of-indonesia.github.io/static" };
+import {
+  DYNAMIC_BASE_URL,
+  STATIC_BASE_URL,
+  itResolveRegion,
+  itResolveRegionEqual,
+  itResolveRegions,
+  itResolveRegionsEqual,
+  itRejectAborted,
+} from "./shared";
 
 const init = (isStatic: boolean) => {
   const driver = createMemoryDriver();
-  return { cache: driver, client: create({ baseURL, middlewares: [delay({ ms: 1 }), cache({ driver })], static: isStatic }) };
-};
-
-const expectRegion = (value: unknown) => {
-  expect(isRegion(value)).toBeTruthy();
-};
-const expectRegions = (value: unknown) => {
-  expect(isRegions(value)).toBeTruthy();
-};
-
-const expectAborted = async <T extends any>(callback: (options: { signal: AbortSignal }) => Promise<T>) => {
-  const controller = new AbortController();
-  queueMicrotask(() => controller.abort());
-  await expect(() => callback({ signal: controller.signal })).rejects.toThrow("Aborted");
-};
-
-const itResolveRegion = (name: string, fn: () => Promise<Region>) => {
-  it(name, async () => {
-    expectRegion(await fn());
-  });
-};
-const itResolveRegionEqual = (name: string, fn: () => Promise<Region>, equal: () => Promise<unknown>) => {
-  it(name, async () => {
-    expect(await fn()).toEqual(await equal());
-  });
-};
-const itResolveRegions = (name: string, fn: () => Promise<Region[]>) => {
-  it(name, async () => {
-    expectRegions(await fn());
-  });
-};
-const itResolveRegionsEqual = (name: string, fn: () => Promise<Region[]>, equal: () => Promise<unknown>) => {
-  it(name, async () => {
-    expect(await fn()).toEqual(await equal());
-  });
-};
-const itRejectAborted = <T>(name: string, fn: (options: { signal: AbortSignal }) => Promise<T>) => {
-  it(name, async () => {
-    await expectAborted(fn);
-  });
+  return {
+    cache: driver,
+    client: create({
+      baseURL: { dynamic: DYNAMIC_BASE_URL, static: STATIC_BASE_URL },
+      middlewares: [delay({ ms: 1 }), cache({ driver })],
+      static: isStatic,
+    }),
+  };
 };
 
 describe("Dynamic", () => {
