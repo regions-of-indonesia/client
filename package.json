@@ -27,7 +27,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "lite.d.ts"
   ],
   "private": false,
   "repository": "https://github.com/regions-of-indonesia/client.git",
