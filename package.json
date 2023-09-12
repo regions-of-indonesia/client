@@ -44,13 +44,13 @@
     "release": "pnpm build && pnpm test && release-it"
   },
   "devDependencies": {
-    "@regions-of-indonesia/types": "5.0.1",
-    "@regions-of-indonesia/utils": "5.0.1",
-    "@vitest/ui": "^0.31.1",
-    "node-fetch": "^3.3.1",
-    "release-it": "^15.10.3",
-    "vite": "^4.3.9",
-    "vite-plugin-dts": "^2.3.0",
-    "vitest": "^0.31.1"
+    "@regions-of-indonesia/types": "5.1.0",
+    "@regions-of-indonesia/utils": "5.1.0",
+    "@vitest/ui": "^0.34.4",
+    "node-fetch": "^3.3.2",
+    "release-it": "^16.1.5",
+    "vite": "^4.4.9",
+    "vite-plugin-dts": "^3.5.3",
+    "vitest": "^0.34.4"
   }
 }
