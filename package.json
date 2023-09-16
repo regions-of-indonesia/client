@@ -48,10 +48,10 @@
     "release": "pnpm build && pnpm test && release-it"
   },
   "dependencies": {
-    "@regions-of-indonesia/types": "5.1.0"
+    "@regions-of-indonesia/types": "5.1.1"
   },
   "devDependencies": {
-    "@regions-of-indonesia/utils": "5.1.0",
+    "@regions-of-indonesia/utils": "5.1.1",
     "@vitest/ui": "^0.34.4",
     "node-fetch": "^3.3.2",
     "release-it": "^16.1.5",
