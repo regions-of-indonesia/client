@@ -19,17 +19,35 @@ export type SearchFn = (name?: string, opts?: Options) => Promise<Region[]>;
 
 export type FindAllObject = {
   (opts?: Options): Promise<Region[]>;
+  /**
+   * find by code
+   */
   by: FindByCodeFn;
 };
 export type FindByCodeObject = {
   (code?: string, opts?: Options): Promise<Region[]>;
+  /**
+   * find by code
+   */
   by: FindByCodeFn;
 };
 export type SearchObject = {
   (name?: string, opts?: Options): Promise<Region[]>;
+  /**
+   * provinces search function
+   */
   provinces: SearchFn;
+  /**
+   * districts search function
+   */
   districts: SearchFn;
+  /**
+   * subdistricts search function
+   */
   subdistricts: SearchFn;
+  /**
+   * villages search function
+   */
   villages: SearchFn;
 };
 

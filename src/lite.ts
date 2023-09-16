@@ -51,14 +51,120 @@ const createFX = (base: string, getURLByKey: (key: string) => string) => {
 };
 
 type DynamicClient = {
-  province: { find: FindAllObject; search: SearchFn };
-  district: { find: FindByCodeObject; search: SearchFn };
-  subdistrict: { find: FindByCodeObject; search: SearchFn };
-  village: { find: FindByCodeObject; search: SearchFn };
+  /**
+   * province actions
+   */
+  province: {
+    /**
+     * find province actions
+     *
+     * @example
+     *
+     * province.find();
+     * province.find.by("11");
+     */
+    find: FindAllObject;
+    /**
+     * provinces search function
+     *
+     * @example
+     *
+     * province.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * district actions
+   */
+  district: {
+    /**
+     * find district actions
+     *
+     * @example
+     *
+     * district.find("11");
+     * district.find.by("11.01");
+     */
+    find: FindByCodeObject;
+    /**
+     * districts search function
+     *
+     * @example
+     *
+     * district.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * subdistrict actions
+   */
+  subdistrict: {
+    /**
+     * find subdistrict actions
+     *
+     * @example
+     *
+     * subdistrict.find("11.01");
+     * subdistrict.find.by("11.01.01");
+     */
+    find: FindByCodeObject;
+    /**
+     * subdistricts search function
+     *
+     * @example
+     *
+     * subdistrict.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * village actions
+   */
+  village: {
+    /**
+     * find village actions
+     *
+     * @example
+     *
+     * village.find("11.01.01");
+     * village.find.by("11.01.01.2001");
+     */
+    find: FindByCodeObject;
+    /**
+     * villages search function
+     *
+     * @example
+     *
+     * village.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * region function
+   *
+   * @example
+   *
+   * region("11");
+   * region("11.01");
+   * region("11.01.01");
+   * region("11.01.01.2001");
+   */
   region: RegionFn;
+  /**
+   * search actions function
+   *
+   * @example
+   *
+   * search("name-to-search");
+   */
   search: SearchObject;
 };
 
+/**
+ *
+ * @param base base URL for dynamic API
+ * @returns dynamic client
+ */
 const createDynamic = (base: string = DEFAULT_DYNAMIC_BASE_URL): DynamicClient => {
   const fx = createFX(base, getDynamicURLByKey);
 
@@ -100,13 +206,80 @@ const createDynamic = (base: string = DEFAULT_DYNAMIC_BASE_URL): DynamicClient =
 };
 
 type StaticClient = {
-  province: { find: FindAllObject };
-  district: { find: FindByCodeObject };
-  subdistrict: { find: FindByCodeObject };
-  village: { find: FindByCodeObject };
+  /**
+   * province actions
+   */
+  province: {
+    /**
+     * find province actions
+     *
+     * @example
+     *
+     * province.find();
+     * province.find.by("11");
+     */
+    find: FindAllObject;
+  };
+  /**
+   * district actions
+   */
+  district: {
+    /**
+     * find district actions
+     *
+     * @example
+     *
+     * district.find("11");
+     * district.find.by("11.01");
+     */
+    find: FindByCodeObject;
+  };
+  /**
+   * subdistrict actions
+   */
+  subdistrict: {
+    /**
+     * find subdistrict actions
+     *
+     * @example
+     *
+     * subdistrict.find("11.01");
+     * subdistrict.find.by("11.01.01");
+     */
+    find: FindByCodeObject;
+  };
+  /**
+   * village actions
+   */
+  village: {
+    /**
+     * find village actions
+     *
+     * @example
+     *
+     * village.find("11.01.01");
+     * village.find.by("11.01.01.2001");
+     */
+    find: FindByCodeObject;
+  };
+  /**
+   * region function
+   *
+   * @example
+   *
+   * region("11");
+   * region("11.01");
+   * region("11.01.01");
+   * region("11.01.01.2001");
+   */
   region: RegionFn;
 };
 
+/**
+ *
+ * @param base base URL for static API
+ * @returns static client
+ */
 const createStatic = (base: string = DEFAULT_STATIC_BASE_URL): StaticClient => {
   const fx = createFX(base, getStaticURLByKey);
 

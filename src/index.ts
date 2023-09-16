@@ -43,9 +43,21 @@ interface BaseURLObject {
 }
 
 interface CreateOptions {
+  /**
+   * base URL for dynamic and/or static
+   */
   baseURL?: Partial<BaseURLObject>;
+  /**
+   * should use static api or not
+   */
   static?: boolean;
+  /**
+   * request middlewares
+   */
   middlewares?: Middleware[];
+  /**
+   * enable logging
+   */
   logger?: boolean;
 }
 
@@ -77,14 +89,120 @@ const betterdiff = (diff: number) =>
   diff >= 10000 ? "10+s" : diff >= 100 ? `${(diff / 1000).toFixed(1)}s` : `${" ".repeat(diff < 10 ? 1 : 0)}${diff}ms`;
 
 type Client = {
-  province: { find: FindAllObject; search: SearchFn };
-  district: { find: FindByCodeObject; search: SearchFn };
-  subdistrict: { find: FindByCodeObject; search: SearchFn };
-  village: { find: FindByCodeObject; search: SearchFn };
+  /**
+   * province actions
+   */
+  province: {
+    /**
+     * find province actions
+     *
+     * @example
+     *
+     * province.find();
+     * province.find.by("11");
+     */
+    find: FindAllObject;
+    /**
+     * provinces search function
+     *
+     * @example
+     *
+     * province.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * district actions
+   */
+  district: {
+    /**
+     * find district actions
+     *
+     * @example
+     *
+     * district.find("11");
+     * district.find.by("11.01");
+     */
+    find: FindByCodeObject;
+    /**
+     * districts search function
+     *
+     * @example
+     *
+     * district.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * subdistrict actions
+   */
+  subdistrict: {
+    /**
+     * find subdistrict actions
+     *
+     * @example
+     *
+     * subdistrict.find("11.01");
+     * subdistrict.find.by("11.01.01");
+     */
+    find: FindByCodeObject;
+    /**
+     * subdistricts search function
+     *
+     * @example
+     *
+     * subdistrict.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * village actions
+   */
+  village: {
+    /**
+     * find village actions
+     *
+     * @example
+     *
+     * village.find("11.01.01");
+     * village.find.by("11.01.01.2001");
+     */
+    find: FindByCodeObject;
+    /**
+     * villages search function
+     *
+     * @example
+     *
+     * village.search("name-to-search");
+     */
+    search: SearchFn;
+  };
+  /**
+   * region function
+   *
+   * @example
+   *
+   * region("11");
+   * region("11.01");
+   * region("11.01.01");
+   * region("11.01.01.2001");
+   */
   region: RegionFn;
+  /**
+   * search actions function
+   *
+   * @example
+   *
+   * search("name-to-search");
+   */
   search: SearchObject;
 };
 
+/**
+ *
+ * @param options create client options
+ * @returns client
+ */
 const create = (options?: CreateOptions) => {
   const BASE_URL: BaseURLObject = resolveBaseURL(options?.baseURL);
   const MIDDLEWARES: Middleware[] = resolveMiddlewares(options?.middlewares);

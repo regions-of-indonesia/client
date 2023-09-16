@@ -1,11 +1,31 @@
 import type { Middleware } from "./shared";
 
 type CacheDriver<T = any> = {
+  /**
+   *
+   * @param key cache key
+   * @returns cache value
+   */
   get: (key: string) => Promise<T>;
+  /**
+   *
+   * @param key cache key
+   * @param value cache value
+   * @returns void
+   */
   set: (key: string, value: T) => Promise<void>;
+  /**
+   *
+   * @param key cache key
+   * @returns void
+   */
   del: (key: string) => Promise<void>;
 };
 
+/**
+ *
+ * @returns cache driver
+ */
 const createMemoryDriver = (): CacheDriver => {
   const map: Map<string, any> = new Map();
 
@@ -22,6 +42,11 @@ const createMemoryDriver = (): CacheDriver => {
   };
 };
 
+/**
+ *
+ * @param options options
+ * @returns cache middleware
+ */
 const cache = (options?: { driver?: CacheDriver }): Middleware => {
   const driver = options?.driver ?? createMemoryDriver();
 
@@ -34,6 +59,11 @@ const cache = (options?: { driver?: CacheDriver }): Middleware => {
   };
 };
 
+/**
+ *
+ * @param options options
+ * @returns delay middleware
+ */
 const delay = (options?: { ms?: number }): Middleware => {
   const wait = async () => new Promise<void>((resolve) => setTimeout(resolve, options?.ms ?? 100));
 
