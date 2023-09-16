@@ -1,6 +1,10 @@
 {
   "name": "@regions-of-indonesia/client",
   "version": "5.2.0",
+  "description": "Regions of Indonesia JavaScript client",
+  "keywords": [
+    "regions-of-indonesia"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
